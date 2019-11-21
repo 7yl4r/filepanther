@@ -7,7 +7,7 @@ import io
 
 # import imars_etl
 # NOTE: can't do that here before dependencies installed, silly.
-VERSION = '0.1.0'  # should match __version__ in imars_etl.__init__.py
+VERSION = '0.2.0'  # should match __version__ in imars_etl.__init__.py
 
 
 def read(*filenames, **kwargs):
@@ -47,12 +47,11 @@ setup(
     install_requires=_install_requires,
     tests_require=_tests_require,
     extras_require=_extras_require,
-    # NOTE: IPFS command line tool is also required...
-    # entry_points={  # sets up CLI (eg bash) commands
-    #     'console_scripts': [
-    #         'filepanther = filepanther.__main__:_main',
-    #     ],
-    # },
+    entry_points={  # sets up CLI (eg bash) commands
+        'console_scripts': [
+            'filepanther = filepanther.__main__:_main',
+        ],
+    },
     # cmdclass={'test': PyTest},  # custom build commands for test/lint/etc
     packages=find_packages()  # modules added to python when installed
 )
