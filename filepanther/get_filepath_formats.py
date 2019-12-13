@@ -64,7 +64,7 @@ def _get_test_formats_records():
 
 def get_ingest_format(**kwargs):
     return get_filepath_formats(
-        **kwargs, check_result=True
+        check_result=True, **kwargs
     )
 
 
