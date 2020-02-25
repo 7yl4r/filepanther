@@ -3,6 +3,7 @@
 
 # std modules:
 from unittest import TestCase
+from unittest.mock import patch
 from datetime import datetime
 
 # dependencies:
@@ -10,6 +11,30 @@ from filepanther.parse_filepath import parse_filepath
 from filepanther.parse_filepath import _strptime_parsed_pattern
 from filepanther.parse_filepath import _parse_multidirective
 from filepanther.parse_filepath import _strptime_safe
+
+
+class Test_parse_filepath(TestCase):
+    @patch('filepanther.parse_filepath.get_filepath_formats')
+    def test_parse_wv_filepath(self, mock_get_filepath_formats):
+        mock_get_filepath_formats.return_value = {
+            'fpath_pattern':
+                '%y%b%d%H%M%S-{m_or_p}1BS-{idNumber}_P{passNumber}{ext}'
+        }
+        filename = (
+            'WV02_20091220161049_103001000366EE00_09DEC20161049-M1BS-' +
+            '502573785040_01_P001.ntf'
+        )
+        result = parse_filepath(
+            {}, filepath=filename,
+            load_format=(
+                'WV{sat_n}_%Y%m%d%H%M%S_{junk}_%y%b%d%H%M%S-' +
+                '{m_or_p}1BS-{idNumber}_P{passNumber}{ext}'
+            )
+        )
+        print(result)
+        self.assertEqual(result['sat_n'], '02')
+        self.assertEqual(result['junk'], '103001000366EE00')
+        self.assertEqual(result['idNumber'], '502573785040_01')
 
 
 class Test_parse_multidirective(TestCase):

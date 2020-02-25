@@ -26,6 +26,10 @@ def parse_filepath(
     from `filepanther.data`. Tries to match against all possible product
     types if args.product_type_name is not given
     parse_filepath but for argparse namespaces
+
+    returns:
+    --------
+    dict containing arguments parsed from filepath.
     """
     logger = logging.getLogger("filepanther.{}".format(
         __name__,
