@@ -15,11 +15,26 @@ from filepanther.parse_filepath import _strptime_safe
 
 class Test_parse_filepath(TestCase):
     @patch('filepanther.parse_filepath.get_filepath_formats')
-    def test_parse_wv_filepath(self, mock_get_filepath_formats):
+    def test_parse_wv_filepath_from_db(self, mock_get_filepath_formats):
+        """filepath parses w/ result from meta db"""
         mock_get_filepath_formats.return_value = {
             'fpath_pattern':
-                '%y%b%d%H%M%S-{m_or_p}1BS-{idNumber}_P{passNumber}{ext}'
+                'WV{sat_n}_%Y%m%d%H%M%S_{junk}_%y%b%d%H%M%S-' +
+                '{m_or_p}1BS-{idNumber}_P{passNumber}{ext}'
         }
+        filename = (
+            'WV02_20091220161049_103001000366EE00_09DEC20161049-M1BS-' +
+            '502573785040_01_P001.ntf'
+        )
+        result = parse_filepath(
+            {}, filepath=filename
+        )
+        self.assertEqual(result['sat_n'], '02')
+        self.assertEqual(result['junk'], '103001000366EE00')
+        self.assertEqual(result['idNumber'], '502573785040_01')
+
+    def test_parse_wv_filepath(self):
+        """filepath parses w/ hard-coded load_format"""
         filename = (
             'WV02_20091220161049_103001000366EE00_09DEC20161049-M1BS-' +
             '502573785040_01_P001.ntf'
@@ -31,7 +46,6 @@ class Test_parse_filepath(TestCase):
                 '{m_or_p}1BS-{idNumber}_P{passNumber}{ext}'
             )
         )
-        print(result)
         self.assertEqual(result['sat_n'], '02')
         self.assertEqual(result['junk'], '103001000366EE00')
         self.assertEqual(result['idNumber'], '502573785040_01')
