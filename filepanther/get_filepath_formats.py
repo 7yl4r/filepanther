@@ -78,6 +78,12 @@ def get_filepath_formats(
     """
     Returns a dict of all ingest formats.
 
+    params
+    ---------
+    metadb_handle: object with .get_records attr
+        A handler for the metadata database that can be queried.
+
+
     example:
     {
         "zip_wv2_ftp_ingest.matts_wv2_ftp_ingest": "wv2_%Y_%m_{tag}.zip",

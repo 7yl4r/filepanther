@@ -27,6 +27,11 @@ def parse_filepath(
     types if args.product_type_name is not given
     parse_filepath but for argparse namespaces
 
+    params:
+    -------
+    metadb_handle: object with .get_records attr
+        A handler for the metadata database that can be queried.
+
     returns:
     --------
     dict containing arguments parsed from filepath.
