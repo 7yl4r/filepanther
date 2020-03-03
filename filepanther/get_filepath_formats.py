@@ -131,7 +131,7 @@ def get_filepath_formats(
             n_clauses += 1
     with metadb_handle.connect() as conn:
         result = conn.execute(
-            sql="""
+            """
         SELECT product.short_name,path_format.short_name,params,format_string
         FROM product_formats
             INNER JOIN path_format
@@ -140,7 +140,7 @@ def get_filepath_formats(
                 ON product.id=product_formats.product_id
         {}
         ORDER BY priority DESC
-            """.format(where_clause),
+            """.format(where_clause)
         )
     logger.debug(result)
 

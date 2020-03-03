@@ -7,6 +7,7 @@ https://docs.python.org/3/library/unittest.html#assert-methods
 # std modules:
 from unittest import TestCase
 from unittest.mock import MagicMock
+import pytest
 
 # tested module(s):
 from filepanther.get_filepath_formats import get_filepath_formats
@@ -55,3 +56,13 @@ class Test_get_filepath_formats(TestCase):
             include_test_formats=False
         )
         self.assertEqual(result, expected)
+
+    @pytest.mark.real_db
+    def test_get_filepath_formats_real(self):
+        """filepath formats doesn't raise on actual database usage"""
+        from sqlalchemy import create_engine
+        from filepanther.SECRETS import META_DB_URI
+        get_filepath_formats(
+            create_engine(META_DB_URI),
+            product_id=6
+        )
