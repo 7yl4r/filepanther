@@ -58,7 +58,8 @@ def parse_filepath(
         )
     else:  # try all patterns (limiting by product name & ingest key if given)
         for pattern_name, pattern in get_filepath_formats(
-            metadb_handle, short_name=product_type_name,
+            metadb_handle,
+            short_name=product_type_name,
             ingest_name=ingest_key,
             product_id=product_id
         ).items():
