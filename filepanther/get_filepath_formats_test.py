@@ -16,8 +16,12 @@ class Test_get_filepath_formats(TestCase):
     def test_get_filepath_format_zero_result(self):
         """ returns empty dict when no results from DB """
         mock_metadb_handle = MagicMock()
-        mock_metadb_handle.get_records = MagicMock(
-            return_value=[()]
+        mock_metadb_handle.connect = MagicMock(
+            name="__enter__",
+            return_value=MagicMock(
+                name="execute",
+                return_value=[()]
+            )
         )
         result = get_filepath_formats(
             mock_metadb_handle,
@@ -25,3 +29,29 @@ class Test_get_filepath_formats(TestCase):
             include_test_formats=False
         )
         self.assertEqual(result, {})
+
+    def test_get_filepath_format_one_result(self):
+        """ returns empty dict when 1 result from DB """
+        FAKE_FORMAT = '1234_filepath_format_%y_{var}.txt'
+        # product.short_name,path_format.short_name,params,format_string
+        sql_result = [['short_name', 'fmt_name', '{}', FAKE_FORMAT]]
+        # meta.connect().__enter__().execute()
+        mock_metadb_handle = MagicMock(spec=["connect"])
+        mock_metadb_handle.connect = MagicMock()
+        mock_metadb_handle.connect.return_value = MagicMock()
+        mock_metadb_handle.connect.return_value.__enter__ = MagicMock()
+        mock_metadb_handle.connect.return_value.__enter__.return_value = MagicMock()
+        mock_metadb_handle.connect.return_value.__enter__.return_value.execute = MagicMock()
+        mock_metadb_handle.connect.return_value.__enter__.return_value.execute.return_value = sql_result
+
+        expected = {'short_name.fmt_name': FAKE_FORMAT}
+        # MagicMock(
+        #         name="execute",
+        #         return_value=[FAKE_FORMAT]
+        # )
+        result = get_filepath_formats(
+            mock_metadb_handle,
+            short_name="s3a_ol_1_efr", product_id=36,
+            include_test_formats=False
+        )
+        self.assertEqual(result, expected)

@@ -80,7 +80,7 @@ def get_filepath_formats(
 
     params
     ---------
-    metadb_handle: object with .get_records attr
+    metadb_handle: sqlalchemy-engine-like w/ .connect & .execute attributes
         A handler for the metadata database that can be queried.
 
 
@@ -129,8 +129,9 @@ def get_filepath_formats(
                 int(product_id)
             )
             n_clauses += 1
-    result = metadb_handle.get_records(
-        sql="""
+    with metadb_handle.connect() as conn:
+        result = conn.execute(
+            sql="""
         SELECT product.short_name,path_format.short_name,params,format_string
         FROM product_formats
             INNER JOIN path_format
@@ -139,9 +140,8 @@ def get_filepath_formats(
                 ON product.id=product_formats.product_id
         {}
         ORDER BY priority DESC
-        """.format(where_clause),
-        first=first, check_result=check_result
-    )
+            """.format(where_clause),
+        )
     logger.debug(result)
 
     res_dict = {}
