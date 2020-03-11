@@ -68,6 +68,40 @@ def get_ingest_format(**kwargs):
     )
 
 
+def _get_where_clause(short_name, ingest_name, product_id):
+    """
+    returns appropriate SQL where clause for given metadata params.
+    """
+    if short_name is None and ingest_name is None and product_id is None:
+        where_clause = ""
+    else:
+        where_clause = " WHERE "
+        n_clauses = 0
+        if short_name is not None:
+            where_clause += " product.short_name='{}' ".format(short_name)
+            n_clauses += 1
+        if ingest_name is not None:
+            if n_clauses > 0:
+                andy = "AND"
+            else:
+                andy = ""
+            where_clause += " {} path_format.short_name='{}' ".format(
+                andy,
+                ingest_name
+            )
+            n_clauses += 1
+        if product_id is not None:
+            if n_clauses > 0:
+                andy = "AND"
+            else:
+                andy = ""
+            where_clause += " {} product.id={} ".format(
+                andy,
+                int(product_id)
+            )
+            n_clauses += 1
+
+
 @lru_cache(maxsize=None)
 def get_filepath_formats(
     metadb_handle,
@@ -101,34 +135,11 @@ def get_filepath_formats(
         short_name, ingest_name, product_id
     ))
 
-    if short_name is None and ingest_name is None and product_id is None:
-        where_clause = ""
+    where_clause = _get_where_clause(short_name, ingest_name, product_id)
+    if first is True:
+        limit_clause = " LIMIT 1 "
     else:
-        where_clause = " WHERE "
-        n_clauses = 0
-        if short_name is not None:
-            where_clause += " product.short_name='{}' ".format(short_name)
-            n_clauses += 1
-        if ingest_name is not None:
-            if n_clauses > 0:
-                andy = "AND"
-            else:
-                andy = ""
-            where_clause += " {} path_format.short_name='{}' ".format(
-                andy,
-                ingest_name
-            )
-            n_clauses += 1
-        if product_id is not None:
-            if n_clauses > 0:
-                andy = "AND"
-            else:
-                andy = ""
-            where_clause += " {} product.id={} ".format(
-                andy,
-                int(product_id)
-            )
-            n_clauses += 1
+        limit_clause = ""
     with metadb_handle.connect() as conn:
         result = conn.execute(
             """
@@ -139,8 +150,8 @@ def get_filepath_formats(
             INNER JOIN product
                 ON product.id=product_formats.product_id
         {}
-        ORDER BY priority DESC
-            """.format(where_clause)
+        ORDER BY priority DESC {}
+            """.format(where_clause, limit_clause)
         )
     logger.debug(result)
 

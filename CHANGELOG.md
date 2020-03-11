@@ -1,3 +1,6 @@
+## 0.3.1
+* fix missing limit clause implementation
+
 ## 0.3.0
 * switch to using sqlalchemy engine rather than db handler
 
