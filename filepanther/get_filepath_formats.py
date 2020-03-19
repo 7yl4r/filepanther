@@ -100,6 +100,7 @@ def _get_where_clause(short_name, ingest_name, product_id):
                 int(product_id)
             )
             n_clauses += 1
+    return where_clause
 
 
 @lru_cache(maxsize=None)
