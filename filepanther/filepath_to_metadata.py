@@ -1,11 +1,11 @@
 import logging
-
+import os
 from parse import parse
 
 from filepanther.util.replace_strftime_dirs import replace_strftime_dirs
 
 
-def filepath_to_metadata(format_string, filepath):
+def filepath_to_metadata(format_string, filepath, basename_only=False):
     """
     Parses metadata from given filepath using the given format string.
     """
@@ -15,7 +15,11 @@ def filepath_to_metadata(format_string, filepath):
         __name__,
         )
     )
-    logger.setLevel(logging.DEBUG)
+    if basename_only:
+        format_string = os.path.basename(format_string)
+        filepath = os.path.basename(filepath)
+        logger.debug("parsing only on basenames")
+
     path_fmt_str = replace_strftime_dirs(format_string)
     params_parsed = parse(path_fmt_str, filepath)
     if params_parsed is None:

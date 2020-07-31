@@ -1,3 +1,6 @@
+## 1.1.0
+* allows parsing only basenames
+
 ## 1.0.0
 * Rethought organization that simplifies API but eliminates db connections.
 

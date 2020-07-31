@@ -36,6 +36,19 @@ class Test_filepath_to_metadata(TestCase):
             "dt_Y": 2020
         })
 
+    def test_fname_str_without_path_info(self):
+        """can parse fname instead of fpath"""
+
+        result = filepath_to_metadata(
+            format_string="/mismatch/one_thing_{this}_%Y.txt",
+            filepath="/_mismatch_/one_thing_abc_2020.txt",
+            basename_only=True
+        )
+        self.assertEqual(result, {
+            "this": "abc",
+            "dt_Y": 2020
+        })
+
     # # TODO:
     # def test_duplicate_named_var(self):
     #     """can parse string with duplicate named variable"""
