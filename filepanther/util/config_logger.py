@@ -5,6 +5,7 @@ TRACE = 5
 
 
 class MyLogger(getLoggerClass()):
+    """Class to extend logging types to include 'trace'"""
     def __init__(self, name, level=NOTSET):
         super().__init__(name, level)
 
@@ -14,10 +15,12 @@ class MyLogger(getLoggerClass()):
         if self.isEnabledFor(TRACE):
             self._log(TRACE, msg, args, **kwargs)
 
+
 setLoggerClass(MyLogger)
 
 
 def run_once(f):
+    """ensure given function only runs the first time it is called"""
     def wrapper(*args, **kwargs):
         if not wrapper.has_run:
             wrapper.has_run = True

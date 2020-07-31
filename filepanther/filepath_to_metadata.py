@@ -15,26 +15,22 @@ def filepath_to_metadata(format_string, filepath):
         __name__,
         )
     )
-    filename = filepath
+    logger.setLevel(logging.DEBUG)
     path_fmt_str = replace_strftime_dirs(format_string)
-    params_parsed = parse(path_fmt_str, filename)
+    params_parsed = parse(path_fmt_str, filepath)
     if params_parsed is None:
         raise SyntaxError(
             "filepath does not match pattern\n\tpath: {}\n\tpattern:{}".format(
-                filename,
+                filepath,
                 path_fmt_str
             )
         )
 
     logger.debug("params parsed from fname: \n\t{}".format(params_parsed))
-    # NOTE: setattr LAST here, else args will get set before we know
-    #   that this filename matches the given pattern
-    parsed_vars = {}
-    for param in params_parsed:
-        if param[:3] != "dt_":  # ignore these
-            val = params_parsed[param]
-            # arg_dict = _set_unless_exists(arg_dict, param, val)
-            parsed_vars[param] = val
-            # logger.debug('{} extracted :"{}"'.format(param, val))
 
-    return parsed_vars
+    if len(params_parsed.fixed) > 0:
+        raise ValueError(
+            "All paramaters must be named ({thing1}), not fixed. ({})"
+        )
+
+    return params_parsed.named
