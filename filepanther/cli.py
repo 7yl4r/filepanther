@@ -9,6 +9,7 @@ import filepanther
 
 
 def main(argvs):
+    raise NotImplementedError("CLI not yet implemented")
     args = parse_args(argvs)
     filepanther.util.config_logger(verbosity=args.verbose, quiet=args.quiet)
 
