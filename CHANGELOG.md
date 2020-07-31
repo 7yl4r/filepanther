@@ -1,3 +1,6 @@
+## 0.4.0
+* transitioning into v2 API (using filepath_to_metadata & metadata_to_filepath)
+
 ## 0.3.1
 * fix missing limit clause implementation
 

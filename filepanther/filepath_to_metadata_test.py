@@ -46,3 +46,13 @@ class Test_filepath_to_metadata(TestCase):
     #     self.assertEqual(result, {
     #         "this": "abc"
     #     })
+    #
+    # def test_duplicate_strftime_directive(self):
+    #     """can parse string with duplicate strftime directive"""
+    #     result = filepath_to_metadata(
+    #         format_string="%Y_duplicate_thing_%Y.txt",
+    #         filepath="2020_one_thing_2020.txt"
+    #     )
+    #     self.assertEqual(result, {
+    #         "this": "abc"
+    #     })
