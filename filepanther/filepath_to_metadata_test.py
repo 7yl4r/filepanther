@@ -23,3 +23,26 @@ class Test_filepath_to_metadata(TestCase):
             filepath="one_thing_abc.txt"
         )
         self.assertEqual(result, {"this": "abc"})
+
+    def test_str_with_strptime_directives(self):
+        """can parse one named variable and one strftime directive"""
+
+        result = filepath_to_metadata(
+            format_string="one_thing_{this}_%Y.txt",
+            filepath="one_thing_abc_2020.txt"
+        )
+        self.assertEqual(result, {
+            "this": "abc",
+            "dt_Y": 2020
+        })
+
+    # # TODO:
+    # def test_duplicate_named_var(self):
+    #     """can parse string with duplicate named variable"""
+    #     result = filepath_to_metadata(
+    #         format_string="{this}_duplicate_thing_{this}.txt",
+    #         filepath="abc_one_thing_abc.txt"
+    #     )
+    #     self.assertEqual(result, {
+    #         "this": "abc"
+    #     })
