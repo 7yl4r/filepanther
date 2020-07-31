@@ -9,6 +9,10 @@ from filepanther.parse_to_fmt_sanitize import restore_parse_fmts
 
 
 def _prefill_fmt_str(fmt_str, params):
+    """
+    Format-fills any {keyed_format_variables} in the given format string from
+    the params json string. 
+    """
     logger = logging.getLogger("filepanther.{}".format(
         __name__,
     ))

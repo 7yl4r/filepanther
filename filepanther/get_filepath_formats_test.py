@@ -11,6 +11,7 @@ import pytest
 
 # tested module(s):
 from filepanther.get_filepath_formats import get_filepath_formats
+from filepanther.get_filepath_formats import _prefill_fmt_str
 
 
 class Test_get_filepath_formats(TestCase):
@@ -66,3 +67,8 @@ class Test_get_filepath_formats(TestCase):
             create_engine(META_DB_URI),
             product_id=6
         )
+
+class Test_prefill_fmt_str(TestCase):
+    def test_basic(self):
+        result = _prefill_fmt_str("{test}abc.123_%y", '{"test":"Foo"}')
+        self.assertEqual(result, 'Fooabc.123_%y')
