@@ -1,3 +1,6 @@
+## 1.0.0
+* Rethought organization that simplifies API but eliminates db connections.
+
 ## 0.4.0
 * transitioning into v2 API (using filepath_to_metadata & metadata_to_filepath)
 
