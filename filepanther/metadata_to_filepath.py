@@ -1,4 +1,4 @@
-def metadata_to_filepath(metadata_dict, format_string):
+def metadata_to_filepath(format_string, metadata_dict):
     """
     Fills a given format string with given metadata.
     """
