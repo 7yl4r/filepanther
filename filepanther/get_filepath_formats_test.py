@@ -1,9 +1,3 @@
-"""
-example unit test for ExampleClass
-list of unittest assert methods:
-https://docs.python.org/3/library/unittest.html#assert-methods
-"""
-
 # std modules:
 from unittest import TestCase
 from unittest.mock import MagicMock
