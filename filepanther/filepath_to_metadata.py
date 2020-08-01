@@ -84,35 +84,6 @@ def _strptime_safe(input_str, fmt_str):
             )
     return datetime.strptime(input_str, fmt_str)
 
-# def _strptime_safe(fpath, prefilled_fmt_str):
-#     """handles cases where there are duplicate strptime directives"""
-#     for direc, fmt in STRFTIME_MAP.items():
-#         # if multiple of a directive
-#         if len(prefilled_fmt_str.split(direc)) > 2:
-#             dt_vals = {}
-#             # === split string and strptime each substring
-#             for substr in prefilled_fmt_str.split(direc):
-#                 dt_val_len = 1  # length of the date value (eg 4 for %Y)
-#                 while dt_val_len > 24:  # longest directive possible is %c
-#                     # keep adding chars until strptime works
-#                     try:
-#                         fpath_substr = fpath[:len(substr + dt_val_len)]
-#                         dt_vals.append(datetime.strptime(
-#                             fpath_substr, substr + direc
-#                         ))
-#                         # if datetime values do not match
-#                         # !!! NOTE: this is going to happen a lot
-#                         #       and I don't know how to deal with it.
-#                         if len(dt_vals) > 1 and dt_vals[0] != dt_vals[-1]:
-#                             dt_vals[0] == dt_vals[-2]
-#                     except ValueError as err:  # strptime needs more chars
-#                         assert "does not match format" in err.message
-#                         dt_val_len += 1
-#             if len(dt_vals) < 2:
-#                 raise ValueError(
-#                     "could not parse duplicate strftime directive"
-#                 )
-
 
 def _parse_multidirective(
     input_str, fmt_str, directive
@@ -160,6 +131,7 @@ def _parse_multidirective(
         n_duplicates
     )
     return read_value, new_str
+
 
 def _contains_strptime_directives(fmt_str):
     for direc, fmt in STRFTIME_MAP.items():
