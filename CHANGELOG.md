@@ -1,6 +1,7 @@
 ## 1.1.0
 * allows parsing only basenames
 * adds special metadata extraction of `_datetime`
+* allows for duplicate strptime directives.
 
 ## 1.0.0
 * Rethought organization that simplifies API but eliminates db connections.
