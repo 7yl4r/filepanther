@@ -1,4 +1,5 @@
 # std modules:
+from datetime import datetime
 from unittest import TestCase
 
 # tested module(s):
@@ -33,7 +34,8 @@ class Test_filepath_to_metadata(TestCase):
         )
         self.assertEqual(result, {
             "this": "abc",
-            "dt_Y": 2020
+            "dt_Y": 2020,
+            "_datetime": datetime(2020, 1, 1)
         })
 
     def test_fname_str_without_path_info(self):
@@ -46,8 +48,20 @@ class Test_filepath_to_metadata(TestCase):
         )
         self.assertEqual(result, {
             "this": "abc",
-            "dt_Y": 2020
+            "dt_Y": 2020,
+            "_datetime": datetime(2020, 1, 1)
         })
+
+    def test_datetime_parsing(self):
+        """can parse full datetime"""
+        result = filepath_to_metadata(
+            format_string="WV02_%Y-%m-%dT%H:%M:%S.file",
+            filepath="WV02_2001-02-03T04:05:06.file"
+        )
+        self.assertEqual(
+            result["_datetime"],
+            datetime(2001, 2, 3, 4, 5, 6)
+        )
 
     # # TODO:
     # def test_duplicate_named_var(self):
