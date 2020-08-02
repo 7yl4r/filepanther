@@ -92,3 +92,71 @@ class Test_filepath_to_metadata(TestCase):
                 format_string="%Y_duplicate_thing_%Y.txt",
                 filepath="2020_duplicate_thing_2010.txt"
             )
+
+    def test_worldview_filepath(self):
+        """can parse worldview filepath"""
+        result = filepath_to_metadata(
+            format_string=(
+                "WV{sat_n:2}_%Y%m%d%H%M%S_{unknown_stuff:16}_"
+                "%y%b%d%H%M%S-M1BS-{idNumber:12}_{unknown_int:2}_"
+                "P{passNumber:3}_{region_short_name}_SOALCHI_"
+                "filt_{filter_width:1d}.tif"
+            ),
+            filepath=(
+                "WV03_20150801165729_104001000E057100_"
+                "15AUG01165729-M1BS-501124619070_01_P002_WELA_SOALCHI_"
+                "filt_3.tif"
+            )
+        )
+        self.assertEqual(result, {
+            "sat_n": "03",
+            "dt_Y": 2015,
+            "dt_m": 8,
+            "dt_d": 1,
+            "dt_H": 16,
+            "dt_M": 57,
+            "dt_S": 29,
+            "unknown_stuff": "104001000E057100",
+            "dt_y": 15,
+            "dt_b": "AUG",
+            "idNumber": "501124619070",
+            "unknown_int": "01",
+            "passNumber": "002",
+            "region_short_name": "WELA",
+            "filter_width": 3,
+            "_datetime": datetime(2015, 8, 1, 16, 57, 29)
+        })
+
+    def test_strptime_smush(self):
+        """parses a bunch of strptime directives squished together"""
+        result = filepath_to_metadata(
+            format_string="%Y%m%d%H%M%S_{unknown_stuff:16}_%y%b%d%H%M%S",
+            filepath="20150801165729_104001000E057100_15AUG01165729"
+        )
+        self.assertEqual(result, {
+            "dt_Y": 2015,
+            "dt_m": 8,
+            "dt_d": 1,
+            "dt_H": 16,
+            "dt_M": 57,
+            "dt_S": 29,
+            "dt_y": 15,
+            "dt_b": "AUG",
+            "unknown_stuff": "104001000E057100",
+            "_datetime": datetime(2015, 8, 1, 16, 57, 29)
+        })
+
+    def test_strptime_cross_directive_constraints(self):
+        """
+        Can parse non-conflicting cross-directive constraints.
+        Eg: year = 2015 and 2-digit year 15
+        """
+        result = filepath_to_metadata(
+            format_string="%Y_apple_%y",
+            filepath="2015_apple_15"
+        )
+        self.assertEqual(result, {
+            "dt_Y": 2015,
+            "dt_y": 15,
+            "_datetime": datetime(2015, 1, 1)
+        })
