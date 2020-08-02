@@ -25,19 +25,23 @@ def filepath_to_metadata(format_string, filepath, basename_only=False):
     # === parse named variables
     path_fmt_str = replace_strftime_dirs(format_string)
     params_parsed = parse(path_fmt_str, filepath)
+
+
     if params_parsed is None:
-        raise SyntaxError(
-            "filepath does not match pattern\n\tpath: {}\n\tpattern:{}".format(
-                filepath,
-                path_fmt_str
+        if _contains_strptime_directives(format_string) is False:
+            raise SyntaxError(
+                f"filepath does not match pattern\n\tpath: {filepath}"
+                f"\n\tpattern:{path_fmt_str}"
             )
-        )
-    # we only care about named params
-    if len(params_parsed.fixed) > 0:
-        raise ValueError(
-            "All parameters must be named ({thing1}), not fixed. ({})"
-        )
-    params_parsed = params_parsed.named
+        else:  # does contain strptime directives
+            params_parsed = {}
+    else:  # params were parsed
+        # we only care about named params
+        if len(params_parsed.fixed) > 0:
+            raise ValueError(
+                "All parameters must be named ({thing1}), not fixed. ({})"
+            )
+        params_parsed = params_parsed.named
 
     # === parse datetime from pre-filled original format string
     if _contains_strptime_directives(format_string):

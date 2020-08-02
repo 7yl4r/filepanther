@@ -1,3 +1,6 @@
+## 1.1.1
+* does not fail on strptime directives only
+
 ## 1.1.0
 * allows parsing only basenames
 * adds special metadata extraction of `_datetime`

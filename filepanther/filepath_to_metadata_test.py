@@ -84,3 +84,11 @@ class Test_filepath_to_metadata(TestCase):
             "dt_Y": 2020,
             "_datetime": datetime(2020, 1, 1)
         })
+
+    def test_duplicate_strftime_directive_different(self):
+        """raises on parse of duplicate different-valued strftime directive"""
+        with self.assertRaises(ValueError):
+            filepath_to_metadata(
+                format_string="%Y_duplicate_thing_%Y.txt",
+                filepath="2020_duplicate_thing_2010.txt"
+            )
