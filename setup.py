@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-"""imars-etl setup.py"""
+"""filepanther setup.py"""
 
 from setuptools import setup
 from setuptools import find_packages
 import io
 
-# import imars_etl
+# import filepanther
 # NOTE: can't do that here before dependencies installed, silly.
-VERSION = '1.1.1'  # should match __version__ in imars_etl.__init__.py
+VERSION = '1.1.1'  # should match __version__ in filepanther.__init__.py
 
 
 def read(*filenames, **kwargs):

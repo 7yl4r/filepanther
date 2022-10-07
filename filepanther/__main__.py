@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
 
-from imars_etl.cli import main
+from filepanther.cli import main
 
 
 def _main():

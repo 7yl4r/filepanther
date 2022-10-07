@@ -13,7 +13,7 @@ def main(argvs):
     args = parse_args(argvs)
     filepanther.util.config_logger(verbosity=args.verbose, quiet=args.quiet)
 
-    logger = logging.getLogger("imars_etl.{}".format(
+    logger = logging.getLogger("filepanther.{}".format(
         __name__,
     ))
     HELLO = '=== IMaRS Extract-Transform-Load Tool v{} ==='.format(
@@ -70,7 +70,7 @@ def parse_args(argvs):
     # =========================================================================
     subparsers = parser.add_subparsers(
         title='subcommands',
-        description='usage: `imars-etl $subcommand` ',
+        description='usage: `filepanther $subcommand` ',
         help='addtnl help for subcommands: `imars-etl $subcommand -h`'
     )
 
