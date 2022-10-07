@@ -24,11 +24,11 @@ def main(argvs):
     logger.info(HELLO)
     logger.info('=' * len(HELLO))
     # # log test:
-    logger.critical('c')
-    logger.warning('w')
-    logger.info('i')
-    logger.debug('d')
-    logger.trace('t')
+    # logger.critical('c')
+    # logger.warning('w')
+    # logger.info('i')
+    # logger.debug('d')
+    # logger.trace('t')
     # exit()
     if args.version:
         print("v{}".format(filepanther.__version__))
@@ -93,13 +93,14 @@ def parse_args(argvs):
         help=textwrap.dedent('''\
             Extract metadata from a filepath. \n
             Usage Examples: \n
-                python3 filepanther parse \ \n
+                python3 filepanther -q parse \ \n
                     /srv/imars-objects/rookery/Processed/wv_classMaps_rgb/\
             20180501T160614_01_P003_WV02_ClassificMap_fullClass_Rookery\
             .tif \ \n 
                     --pattern /srv/imars-objects/rookery/Processed/\
             wv_classMaps_rgb/%%Y%%m%%dT%%H%%M%%S_{number}_P{pass_n}_\
-            WV{sat_n}_ClassificMap_fullClass_Rookery.tif
+            WV{sat_n}_ClassificMap_fullClass_Rookery.tif \ \n
+            > metadata.json
         ''')
     )
     parser_parse.set_defaults(func=filepanther.parse_filepath)

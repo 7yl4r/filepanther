@@ -2,7 +2,6 @@ import logging
 from logging import getLoggerClass, addLevelName, setLoggerClass, NOTSET
 
 TRACE = 5
-print("importing logger config module...")
 
 class MyLogger(getLoggerClass()):
     """Class to extend logging types to include 'trace'"""
@@ -37,7 +36,7 @@ def config_logger(verbosity=0, quiet=False):
     =========================================================================
     """
     MODULE_NAME=__name__.split('.')[0]
-    print(f"{MODULE_NAME} config_logger(v={verbosity}, q={quiet})")
+    # print(f"{MODULE_NAME} config_logger(v={verbosity}, q={quiet})")
     if quiet:
         if verbosity > 0:
             raise ValueError(
