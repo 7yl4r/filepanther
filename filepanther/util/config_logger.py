@@ -2,7 +2,7 @@ import logging
 from logging import getLoggerClass, addLevelName, setLoggerClass, NOTSET
 
 TRACE = 5
-
+print("importing logger config module...")
 
 class MyLogger(getLoggerClass()):
     """Class to extend logging types to include 'trace'"""
@@ -31,9 +31,13 @@ def run_once(f):
 
 @run_once
 def config_logger(verbosity=0, quiet=False):
-    # =========================================================================
-    # === set up logging behavior
-    # =========================================================================
+    """
+    =========================================================================
+    === set up logging behavior
+    =========================================================================
+    """
+    MODULE_NAME=__name__.split('.')[0]
+    print(f"{MODULE_NAME} config_logger(v={verbosity}, q={quiet})")
     if quiet:
         if verbosity > 0:
             raise ValueError(
@@ -71,13 +75,14 @@ def config_logger(verbosity=0, quiet=False):
     stream_handler.setFormatter(short_formatter)
     stream_handler.setLevel(lvl_console)
 
-    logging.getLogger("imars_etl").addHandler(stream_handler)
-    logging.getLogger("imars_etl").setLevel(lvl_console)
+    logging.getLogger(MODULE_NAME).addHandler(stream_handler)
+    logging.getLogger(MODULE_NAME).setLevel(lvl_console)
 
     # disable misbehaving root logger
     # logging.getLogger("").setLevel(logging.WARNING)
     # config our loggers
-    logging.getLogger("imars_etl").propagate = False
+    logging.getLogger(MODULE_NAME).propagate = False
+
     # === config lib loggers
     logging.getLogger("airflow").setLevel(lvl_libs)
     logging.getLogger("airflow").propagate = False

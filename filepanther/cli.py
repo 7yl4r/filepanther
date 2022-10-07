@@ -2,29 +2,31 @@
 Define CLI interface using argparse.
 
 """
-import logging
 from argparse import ArgumentParser
+import logging
+import sys
 
 import filepanther
-
+from .util.config_logger import config_logger
 
 def main(argvs):
     args = parse_args(argvs)
-
-    logger = logging.getLogger("filepanther.{}".format(
+    config_logger(args.verbose, args.quiet)
+    logger = logging.getLogger("{}.{}".format(
         __name__,
-    ))
+        sys._getframe().f_code.co_name)
+    )
     HELLO = '=== IMaRS file-path-handling Tool "filepanther" v{} ==='.format(
         filepanther.__version__
     )
     logger.info(HELLO)
     logger.info('=' * len(HELLO))
     # # log test:
-    # logger.critical('c')
-    # logger.warning('w')
-    # logger.info('i')
-    # logger.debug('d')
-    # logger.trace('t')
+    logger.critical('c')
+    logger.warning('w')
+    logger.info('i')
+    logger.debug('d')
+    logger.trace('t')
     # exit()
     if args.version:
         print("v{}".format(filepanther.__version__))
