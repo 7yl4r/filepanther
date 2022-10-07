@@ -3,8 +3,10 @@ Define CLI interface using argparse.
 
 """
 from argparse import ArgumentParser
+import argparse
 import logging
 import sys
+import textwrap
 
 import filepanther
 from .util.config_logger import config_logger
@@ -74,7 +76,7 @@ def parse_args(argvs):
     subparsers = parser.add_subparsers(
         title='subcommands',
         description='usage: `filepanther $subcommand` ',
-        help='addtnl help for subcommands: `imars-etl $subcommand -h`'
+        help='addtnl help for subcommands: `filepanther $subcommand -h`'
     )
 
     # # === extract
@@ -85,14 +87,25 @@ def parse_args(argvs):
     # parser_extract.set_defaults(func=extract, **EXTRACT_DEFAULTS)
     # parser_extract.add_argument("sql", **SQL)
 
-
     parser_parse = subparsers.add_parser(
         "parse",
-        help="extract metadata from filepath"
+        formatter_class=argparse.RawTextHelpFormatter,
+        help=textwrap.dedent('''\
+            Extract metadata from a filepath. \n
+            Usage Examples: \n
+                python3 filepanther parse \ \n
+                    /srv/imars-objects/rookery/Processed/wv_classMaps_rgb/\
+            20180501T160614_01_P003_WV02_ClassificMap_fullClass_Rookery\
+            .tif \ \n 
+                    --pattern /srv/imars-objects/rookery/Processed/\
+            wv_classMaps_rgb/%%Y%%m%%dT%%H%%M%%S_{number}_P{pass_n}_\
+            WV{sat_n}_ClassificMap_fullClass_Rookery.tif
+        ''')
     )
-    parser_parse.set_defaults(func=filepanther.parse)
+    parser_parse.set_defaults(func=filepanther.parse_filepath)
     parser_parse.add_argument("filepath")
     parser_parse.add_argument("--type_of_file", "-t")
+    parser_parse.add_argument("--pattern", "-p")
 
     # ===
     args = parser.parse_args(argvs)
