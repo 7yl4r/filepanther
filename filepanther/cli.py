@@ -9,14 +9,12 @@ import filepanther
 
 
 def main(argvs):
-    raise NotImplementedError("CLI not yet implemented")
     args = parse_args(argvs)
-    filepanther.util.config_logger(verbosity=args.verbose, quiet=args.quiet)
 
     logger = logging.getLogger("filepanther.{}".format(
         __name__,
     ))
-    HELLO = '=== IMaRS Extract-Transform-Load Tool v{} ==='.format(
+    HELLO = '=== IMaRS file-path-handling Tool "filepanther" v{} ==='.format(
         filepanther.__version__
     )
     logger.info(HELLO)
@@ -33,7 +31,10 @@ def main(argvs):
         exit()
     else:
         del args.version
-        fn = args.func
+        try:
+            fn = args.func
+        except AttributeError:
+            parse_args([""])
         del args.func
         result = fn(**vars(args))
 
@@ -81,6 +82,15 @@ def parse_args(argvs):
     # )
     # parser_extract.set_defaults(func=extract, **EXTRACT_DEFAULTS)
     # parser_extract.add_argument("sql", **SQL)
+
+
+    parser_parse = subparsers.add_parser(
+        "parse",
+        help="extract metadata from filepath"
+    )
+    parser_parse.set_defaults(func=filepanther.parse)
+    parser_parse.add_argument("filepath")
+    parser_parse.add_argument("--type_of_file", "-t")
 
     # ===
     args = parser.parse_args(argvs)
