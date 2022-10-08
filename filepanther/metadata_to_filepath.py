@@ -16,8 +16,12 @@ def metadata_to_filepath(format_string, metadata_dict):
             directive = dir_key.split("dt_")[1]
             directive = "%" + directive
             if directive in result:  # insert value
-                result = result.replace(directive, STRFTIME_MAP[directive])
-                result = result.format(**metadata_dict)
+                # use value directly if string
+                if isinstance(metadata_dict[dir_key], str):
+                    result = result.replace(directive, metadata_dict[dir_key])
+                else:  # format it to string accordingly
+                    result = result.replace(directive, STRFTIME_MAP[directive])
+                    result = result.format(**metadata_dict)
             # else diretive not in string, it's unused metadata
             # TODO: show warning about unused metadata?
     return result
