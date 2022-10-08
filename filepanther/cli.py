@@ -115,7 +115,7 @@ def parse_args(argvs):
     )
     parser_format.set_defaults(func=filepanther.format_filepath)
     parser_format.add_argument("--pattern")
-    parser_format.add_argument("--json_file")
+    parser_format.add_argument("--pickle_file")
 
     # ===
     args = parser.parse_args(argvs)

@@ -5,7 +5,7 @@ from parse import parse
 
 from filepanther.util.replace_strftime_dirs import replace_strftime_dirs
 from filepanther.util.STRFTIME_MAP import STRFTIME_MAP
-
+from filepanther.util.get_strftime_dict import get_strftime_dict
 
 def filepath_to_metadata(format_string, filepath, basename_only=False):
     """
@@ -49,6 +49,10 @@ def filepath_to_metadata(format_string, filepath, basename_only=False):
         params_parsed["_datetime"] = _strptime_safe(
             filepath, prefilled_fmt_string
         )
+
+    # === if a _datetime was constructed, then fill all strftime directives
+    if "_datetime" in params_parsed:
+        params_parsed.update(get_strftime_dict(params_parsed["_datetime"])) 
 
     logger.debug("params parsed from fname: \n\t{}".format(params_parsed))
 
