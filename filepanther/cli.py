@@ -107,7 +107,7 @@ def parse_args(argvs):
     parser_parse.add_argument("filepath")
     parser_parse.add_argument("--type_of_file", "-t")
     parser_parse.add_argument("--pattern", "-p")
-
+    parser_parse.add_argument("--pickle_fpath")
 
     parser_format = subparsers.add_parser(
         "format",

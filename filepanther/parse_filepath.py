@@ -1,12 +1,16 @@
 import json
 import logging
+import pickle
 import sys 
 
 from filepanther.filepath_to_metadata import filepath_to_metadata
 
 
 def parse_filepath(
-    filepath, type_of_file=None, pattern=None, verbose=False, quiet=False
+    filepath, 
+    type_of_file=None, pattern=None, 
+    pickle_fpath=None,
+    verbose=False, quiet=False
 ):
     """get metadata from filepath"""
     logger = logging.getLogger("{}.{}".format(
@@ -28,8 +32,11 @@ def parse_filepath(
         assert pattern is not None
     
     logger.info(f"parsing file using known file-pattern '{type_of_file}'")
-
     metadata = filepath_to_metadata(format_string=pattern, filepath=filepath)
     logger.trace(f"metadata:\n{metadata}")
+
+    if pickle_fpath is not None:
+        with open(pickle_fpath, "wb") as fhandle:
+            pickle.dump(metadata, fhandle)
     del metadata["_datetime"]
     return json.dumps(metadata)
