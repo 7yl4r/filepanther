@@ -1,3 +1,4 @@
+import json
 import logging
 import sys 
 
@@ -28,4 +29,7 @@ def parse_filepath(
     
     logger.info(f"parsing file using known file-pattern '{type_of_file}'")
 
-    return filepath_to_metadata(format_string=pattern, filepath=filepath)
+    metadata = filepath_to_metadata(format_string=pattern, filepath=filepath)
+    logger.trace(f"metadata:\n{metadata}")
+    del metadata["_datetime"]
+    return json.dumps(metadata)
