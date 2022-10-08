@@ -108,6 +108,15 @@ def parse_args(argvs):
     parser_parse.add_argument("--type_of_file", "-t")
     parser_parse.add_argument("--pattern", "-p")
 
+
+    parser_format = subparsers.add_parser(
+        "format",
+        help="fill filepath patterns using metadata"
+    )
+    parser_format.set_defaults(func=filepanther.format_filepath)
+    parser_format.add_argument("--pattern")
+    parser_format.add_argument("--json_file")
+
     # ===
     args = parser.parse_args(argvs)
     try:
